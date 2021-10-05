@@ -14,9 +14,9 @@ public class ImageAnimator {
     // Apple suggests a timescale of 600 because it's a multiple of standard video rates 24, 25, 30, 60 fps etc.
     static let kTimescale: Int32 = 600
     
-    let settings: RenderSettings
-    let videoWriter: VideoWriter
-    var images: [UIImage]!
+    public let settings: RenderSettings
+    public let videoWriter: VideoWriter
+    public var images: [UIImage]!
     
     var frameNum = 0
     
@@ -43,12 +43,12 @@ public class ImageAnimator {
         }
     }
 
-    init(renderSettings: RenderSettings) {
+    public init(renderSettings: RenderSettings) {
         settings = renderSettings
         videoWriter = VideoWriter(renderSettings: settings)
     }
 
-    func render(completion: (()->Void)?) {
+    public func render(completion: (()->Void)?) {
 
         // The VideoWriter will fail if a file exists at the URL, so clear it out first.
         ImageAnimator.removeFileAtURL(fileURL: settings.outputURL)

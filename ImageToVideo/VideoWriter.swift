@@ -9,12 +9,12 @@ import Foundation
 import AVFoundation
 import UIKit
 
-class VideoWriter {
+public class VideoWriter {
     
     let renderSettings: RenderSettings
     
-    var videoWriter: AVAssetWriter!
-    var videoWriterInput: AVAssetWriterInput!
+    public var videoWriter: AVAssetWriter!
+    public var videoWriterInput: AVAssetWriterInput!
     var pixelBufferAdaptor: AVAssetWriterInputPixelBufferAdaptor!
     
     var isReadyForData: Bool {
@@ -57,11 +57,11 @@ class VideoWriter {
         return pixelBuffer
     }
     
-    init(renderSettings: RenderSettings) {
+    public init(renderSettings: RenderSettings) {
         self.renderSettings = renderSettings
     }
     
-    func start() {
+    public func start() {
         
         let avOutputSettings: [String: Any] = [
             AVVideoCodecKey: renderSettings.avCodecKey,
@@ -113,7 +113,7 @@ class VideoWriter {
         precondition(pixelBufferAdaptor.pixelBufferPool != nil, "nil pixelBufferPool")
     }
     
-    func render(appendPixelBuffers: ((VideoWriter)->Bool)?, completion: (()->Void)?) {
+    public func render(appendPixelBuffers: ((VideoWriter)->Bool)?, completion: (()->Void)?) {
         
         precondition(videoWriter != nil, "Call start() to initialze the writer")
         
@@ -134,7 +134,7 @@ class VideoWriter {
         }
     }
     
-    func addImage(image: UIImage, withPresentationTime presentationTime: CMTime) -> Bool {
+    public func addImage(image: UIImage, withPresentationTime presentationTime: CMTime) -> Bool {
         precondition(pixelBufferAdaptor != nil, "Call start() to initialze the writer")
         
         let pixelBuffer = VideoWriter.pixelBufferFromImage(image: image, pixelBufferPool: pixelBufferAdaptor.pixelBufferPool!, size: renderSettings.size)

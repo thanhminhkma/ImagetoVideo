@@ -9,15 +9,15 @@ import AVFoundation
 import UIKit
 import Photos
 
-struct RenderSettings {
-    var size : CGSize = .zero
-    var fps: Double = 6   // frames per second
-    var avCodecKey: AVVideoCodecType = AVVideoCodecType.h264
-    var videoFilename: String = "render"
-    var videoFilenameExt: String = "mp4"
-    var saveToLibrary: Bool = true
+public struct RenderSettings {
+    public var size : CGSize = .zero
+    public var fps: Double = 6   // frames per second
+    public var avCodecKey: AVVideoCodecType = AVVideoCodecType.h264
+    public var videoFilename: String = "render"
+    public var videoFilenameExt: String = "mp4"
+    public var saveToLibrary: Bool = true
 
-    var outputURL: URL {
+    public var outputURL: URL {
         let fileManager = FileManager.default
         if let tmpDirURL = try? fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true) {
             return tmpDirURL.appendingPathComponent(videoFilename).appendingPathExtension(videoFilenameExt)
