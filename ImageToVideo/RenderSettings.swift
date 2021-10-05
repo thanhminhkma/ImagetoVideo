@@ -24,4 +24,13 @@ public struct RenderSettings {
         }
         fatalError("URLForDirectory() failed")
     }
+    
+    public init(size: CGSize, fps: Double, avCodecKey: AVVideoCodecType, videoFilename: String, videoFilenameExt: String, saveToLibrary: Bool) {
+        self.size = size
+        self.fps = fps
+        self.avCodecKey = avCodecKey
+        self.videoFilename = videoFilename
+        self.videoFilenameExt = videoFilenameExt
+        self.saveToLibrary = saveToLibrary
+    }
 }
