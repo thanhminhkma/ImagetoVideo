@@ -11,11 +11,12 @@ import Photos
 
 public struct RenderSettings {
     public var size : CGSize = .zero
-    public var fps: Double = 6   // frames per second
+    public var fps: Int32 = 6   // frames per second
     public var avCodecKey: AVVideoCodecType = AVVideoCodecType.h264
     public var videoFilename: String = "render"
     public var videoFilenameExt: String = "mp4"
     public var saveToLibrary: Bool = true
+    public var imageloop: Int32 = 1
 
     public var outputURL: URL {
         let fileManager = FileManager.default
@@ -25,12 +26,13 @@ public struct RenderSettings {
         fatalError("URLForDirectory() failed")
     }
     
-    public init(size: CGSize = .zero, fps: Double = 6, avCodecKey: AVVideoCodecType = .h264, videoFilename: String = "render", videoFilenameExt: String = "mp4", saveToLibrary: Bool = true) {
+    public init(size: CGSize = .zero, fps: Int32 = 6, avCodecKey: AVVideoCodecType = .h264, videoFilename: String = "render", videoFilenameExt: String = "mp4", saveToLibrary: Bool = true, imageloop: Int32 = 1) {
         self.size = size
         self.fps = fps
         self.avCodecKey = avCodecKey
         self.videoFilename = videoFilename
         self.videoFilenameExt = videoFilenameExt
         self.saveToLibrary = saveToLibrary
+        self.imageloop = imageloop
     }
 }

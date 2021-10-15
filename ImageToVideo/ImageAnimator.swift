@@ -66,15 +66,20 @@ public class ImageAnimator {
     // This is the callback function for VideoWriter.render()
     func appendPixelBuffers(writer: VideoWriter) -> Bool {
 
-        let frameDuration = CMTimeMake(value: Int64(Double(ImageAnimator.kTimescale) / settings.fps), timescale: ImageAnimator.kTimescale)
-
+        let frameDuration = CMTimeMake(value: Int64(ImageAnimator.kTimescale / settings.fps), timescale: ImageAnimator.kTimescale)
+        var loopNumber = 0
         while !images.isEmpty {
             if writer.isReadyForData == false {
                 // Inform writer we have more buffers to write.
                 return false
             }
-
-            let image = images.removeFirst()
+            var image: UIImage = images.first ?? UIImage()
+            if loopNumber == settings.imageloop {
+                image = images.removeFirst()
+                loopNumber = 0
+            } else {
+                loopNumber += 1
+            }
             let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(frameNum))
             let success = videoWriter.addImage(image: image, withPresentationTime: presentationTime)
             if success == false {
