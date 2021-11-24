@@ -73,22 +73,25 @@ public class ImageAnimator {
                 // Inform writer we have more buffers to write.
                 return false
             }
-            var image: UIImage = images.first ?? UIImage()
-            if loopNumber == settings.imageloop {
-                image = images.removeFirst()
-                loopNumber = 0
-            } else {
-                loopNumber += 1
+            autoreleasepool {
+                let image: UIImage = images.first ?? UIImage()
+                if loopNumber == settings.imageloop {
+                    loopNumber = 0
+                } else {
+                    loopNumber += 1
+                }
+                let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(frameNum))
+                let success = writer.addImage(image: image, withPresentationTime: presentationTime)
+                if success == false {
+                    print("fale to add image")
+                } else {
+                    if loopNumber == 0 {
+                        images.removeFirst()
+                    }
+                }
+                frameNum += 1
             }
-            let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(frameNum))
-            let success = videoWriter.addImage(image: image, withPresentationTime: presentationTime)
-            if success == false {
-                fatalError("addImage() failed")
-            }
-            frameNum += 1
         }
-
-        // Inform writer all buffers have been written.
         return true
     }
 }
