@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ImageToVideo"
-  s.version      = "0.1.8"
+  s.version      = "1.0.0"
   s.summary      = "Simple export video from image array"
   s.homepage     = "https://github.com/thanhminhkma/ImagetoVideo"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
