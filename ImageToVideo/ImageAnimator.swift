@@ -67,32 +67,28 @@ public class ImageAnimator {
     func appendPixelBuffers(writer: VideoWriter) -> Bool {
 
         let frameDuration = CMTimeMake(value: Int64(ImageAnimator.kTimescale / settings.fps), timescale: ImageAnimator.kTimescale)
-        var pixelBuffers = images.map {
-            writer.getFrameBuffer(image: $0)
-        }
-        while !pixelBuffers.isEmpty {
+        var pixelBuffer: CVPixelBuffer!
+        while !images.isEmpty {
             if writer.isReadyForData == false {
                 // Inform writer we have more buffers to write.
                 return false
             }
-            if (pixelBuffers.count == 0) {
-                return true
-            }
             let diff = frameNum % settings.imageloop
-            autoreleasepool {
-                let pixelBuffer: CVPixelBuffer = pixelBuffers[0]
-                
-                let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(frameNum))
-                let success = writer.addBuffer(pixelBuffer: pixelBuffer, withPresentationTime: presentationTime)
-                if success == false {
-                    print("fale to add image")
-                } else {
-                    if diff == 0 && frameNum != 0 {
-                        pixelBuffers.removeFirst()
-                        images.removeFirst()
-                    }
-                    frameNum += 1
+            if diff == 0 || pixelBuffer == nil {
+                let image = images.first
+                pixelBuffer = writer.getFrameBuffer(image: image!)
+            }
+            print("difff \(diff) \(frameNum)")
+            
+            let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(frameNum))
+            let success = writer.addBuffer(pixelBuffer: pixelBuffer, withPresentationTime: presentationTime)
+            if success == false {
+                print("fale to add image")
+            } else {
+                if diff == 0, frameNum != 0 {
+                    images.removeFirst()
                 }
+                frameNum += 1
             }
         }
         return true
