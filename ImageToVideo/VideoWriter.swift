@@ -134,6 +134,15 @@ public class VideoWriter {
         }
     }
     
+    public func getFrameBuffer(image: UIImage) -> CVPixelBuffer {
+        return VideoWriter.pixelBufferFromImage(image: image, pixelBufferPool: pixelBufferAdaptor.pixelBufferPool!, size: renderSettings.size)
+    }
+    
+    public func addBuffer(pixelBuffer: CVPixelBuffer, withPresentationTime presentationTime: CMTime) -> Bool {
+        precondition(pixelBufferAdaptor != nil, "Call start() to initialze the writer")
+        return pixelBufferAdaptor.append(pixelBuffer, withPresentationTime: presentationTime)
+    }
+    
     public func addImage(image: UIImage, withPresentationTime presentationTime: CMTime) -> Bool {
         precondition(pixelBufferAdaptor != nil, "Call start() to initialze the writer")
         

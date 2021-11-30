@@ -67,29 +67,32 @@ public class ImageAnimator {
     func appendPixelBuffers(writer: VideoWriter) -> Bool {
 
         let frameDuration = CMTimeMake(value: Int64(ImageAnimator.kTimescale / settings.fps), timescale: ImageAnimator.kTimescale)
-        var loopNumber = 0
-        while !images.isEmpty {
+        var pixelBuffers = images.map {
+            writer.getFrameBuffer(image: $0)
+        }
+        while !pixelBuffers.isEmpty {
             if writer.isReadyForData == false {
                 // Inform writer we have more buffers to write.
                 return false
             }
+            if (pixelBuffers.count == 0) {
+                return true
+            }
+            let diff = frameNum % settings.imageloop
             autoreleasepool {
-                let image: UIImage = images.first ?? UIImage()
-                if loopNumber == settings.imageloop {
-                    loopNumber = 0
-                } else {
-                    loopNumber += 1
-                }
+                let pixelBuffer: CVPixelBuffer = pixelBuffers[0]
+                
                 let presentationTime = CMTimeMultiply(frameDuration, multiplier: Int32(frameNum))
-                let success = writer.addImage(image: image, withPresentationTime: presentationTime)
+                let success = writer.addBuffer(pixelBuffer: pixelBuffer, withPresentationTime: presentationTime)
                 if success == false {
                     print("fale to add image")
                 } else {
-                    if loopNumber == 0 {
+                    if diff == 0 && frameNum != 0 {
+                        pixelBuffers.removeFirst()
                         images.removeFirst()
                     }
+                    frameNum += 1
                 }
-                frameNum += 1
             }
         }
         return true
